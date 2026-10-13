@@ -31,43 +31,6 @@ ros2 launch ros_vrpn optitrack_dronehall.launch.py object_name:=<rigid_body_name
 
 `object_name` must match the rigid body name in the motion capture software exactly (case-sensitive).
 
-| Argument | Default | Description |
-|---|---|---|
-| `object_name` | `red` | Rigid body name. Also used as the ROS namespace. |
-| `vrpn_server_ip` | `localhost` | IP address of the VRPN server. |
-| `coordinate_system` | `vicon` | `vicon`: data is used as streamed. `optitrack`: converts Y-up to Z-up. |
-| `remap` | `True` | Remap `raw_pose` to `remap_out_topic`. |
-| `remap_out_topic` | `/mavros/vision_pose/pose` | Target topic for `raw_pose`. |
-
-## Topics
-
-Published under the namespace `/<object_name>/`:
-
-| Topic | Type | Description |
-|---|---|---|
-| `raw_transform` | `geometry_msgs/TransformStamped` | Raw measured pose |
-| `raw_pose` | `geometry_msgs/PoseStamped` | Raw measured pose |
-| `estimated_transform` | `geometry_msgs/TransformStamped` | Filtered pose |
-| `estimated_odometry` | `nav_msgs/Odometry` | Filtered pose and velocity |
-
-The transform `vicon` → `<object_name>` is also published on `/tf`.
-
-Check that data arrives:
-
-```bash
-ros2 topic hz /<object_name>/estimated_odometry
-```
-
-## Coordinate frame
-
-If the motion capture software streams with Z up, keep the default `coordinate_system:=vicon`. If it streams with Y up (OptiTrack default), use `coordinate_system:=optitrack`. In both cases the ROS frame is right-handed with Z pointing up.
-
-## Troubleshooting
-
-- **No data:** check that the VRPN server is reachable (`ping <server_ip>`), that VRPN streaming is enabled, and that the rigid body name is correct.
-- **Topic not visible after changing networks:** restart the ROS 2 daemon with `ros2 daemon stop && ros2 daemon start`.
-- **`VRPN Note: minor version number doesn't match`:** harmless.
-
 ## License
 
 Apache 2.0, see [LICENSE](LICENSE).
