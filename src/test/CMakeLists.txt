@@ -1,0 +1,6 @@
+add_library(test_helper_library library/test_helper_library.cpp)
+ament_target_dependencies(test_helper_library Eigen3)
+ament_add_gtest(test_vicon_estimator test_vicon_estimator.cpp)
+ament_target_dependencies(test_vicon_estimator Eigen3)
+target_link_libraries(test_vicon_estimator vicon_estimator test_helper_library)
+include_directories(include)
